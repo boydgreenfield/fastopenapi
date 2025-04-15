@@ -225,7 +225,7 @@ class BaseRouter:
                 param.annotation, BaseModel
             ):
                 if http_method.upper() == "GET":
-                    model_schema = param.annotation.model_json_schema()
+                    model_schema = param.annotation.model_json_schema(mode="serialization")
                     required_fields = model_schema.get("required", [])
                     properties = model_schema.get("properties", {})
                     for prop_name, prop_schema in properties.items():
@@ -356,6 +356,7 @@ class BaseRouter:
         if cache_key not in cls._model_schema_cache:
             # Generate the schema if it's not in the cache
             model_schema = model.model_json_schema(
+                mode="serialization",
                 ref_template="#/components/schemas/{model}"
             )
 
